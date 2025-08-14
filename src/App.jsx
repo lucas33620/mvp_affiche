@@ -8,8 +8,19 @@ import { Card, CardContent } from "./components/ui/card";
 // Styling: TailwindCSS (no import needed in this sandbox). Uses shadcn/ui components.
 // Replace the STRIPE_LINK const with your real Stripe Payment Link (test mode ok).
 
-const STRIPE_LINK = "#replace-with-stripe-payment-link";
+const STRIPE_LINKS = {
+  unique: "https://buy.stripe.com/test_28E8wP2MecgGdmD1jwes000",
+  pack5: "https://buy.stripe.com/test_4gM9ATcmO94u96n2nAes001",
+  abo: "https://buy.stripe.com/test_4gM9ATaeG80q2HZbYaes002",
+};
 
+export default function AffichesIALanding() {
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = (link) => {
+    setLoading(true);
+    window.location.href = link;
+  };
 const features = [
   { icon: Shield, title: "Affiches pro, prêtes à imprimer", text: "Mise en page nette (A4/A3), typographies lisibles, marges et grilles soignées." },
   { icon: Sparkles, title: "IA pour texte & visuels", text: "Contenu rédigé avec GPT et illustrations générées avec style cohérent." },
@@ -122,28 +133,37 @@ export default function AffichesIALanding() {
         </div>
       </section>
 
-      {/* Pricing */}
+       {/* Pricing */}
       <section className="mx-auto max-w-6xl px-6 py-8" id="pricing">
         <h2 className="text-2xl font-semibold">Offres & tarifs</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {pricing.map((p) => (
-            <Card key={p.title} className="rounded-2xl bg-white text-neutral-900">
-              <CardContent className="p-6">
-                <div className="text-sm font-medium text-neutral-500">{p.title}</div>
-                <div className="mt-1 text-3xl font-bold">{p.price}</div>
-                <ul className="mt-4 space-y-2 text-sm">
-                  {p.perks.map((perk) => (
-                    <li key={perk} className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-600" /> {perk}
-                    </li>
-                  ))}
-                </ul>
-                <Button onClick={handleCheckout} className="mt-6 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">
-                  Choisir cette offre
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+          {pricing.map((p) => {
+            let link;
+            if (p.title === "Affiche unique") link = STRIPE_LINKS.unique;
+            if (p.title === "Pack 5 affiches") link = STRIPE_LINKS.pack5;
+            if (p.title === "Abonnement trimestriel") link = STRIPE_LINKS.abo;
+            return (
+              <Card key={p.title} className="rounded-2xl bg-white text-neutral-900">
+                <CardContent className="p-6">
+                  <div className="text-sm font-medium text-neutral-500">{p.title}</div>
+                  <div className="mt-1 text-3xl font-bold">{p.price}</div>
+                  <ul className="mt-4 space-y-2 text-sm">
+                    {p.perks.map((perk) => (
+                      <li key={perk} className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" /> {perk}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    onClick={() => handleCheckout(link)}
+                    className="mt-6 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
+                  >
+                    Choisir cette offre
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
