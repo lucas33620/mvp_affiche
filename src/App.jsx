@@ -21,6 +21,7 @@ export default function AffichesIALanding() {
     setLoading(true);
     window.location.href = link;
   };
+
 const features = [
   { icon: Shield, title: "Affiches pro, prêtes à imprimer", text: "Mise en page nette (A4/A3), typographies lisibles, marges et grilles soignées." },
   { icon: Sparkles, title: "IA pour texte & visuels", text: "Contenu rédigé avec GPT et illustrations générées avec style cohérent." },
@@ -59,13 +60,6 @@ function TextArea({ label, rows = 4, ...props }) {
   );
 }
 
-export default function AffichesIALanding() {
-  const [loading, setLoading] = useState(false);
-
-  const handleCheckout = () => {
-    setLoading(true);
-    window.location.href = STRIPE_LINK;
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-900 via-indigo-800 to-sky-700 text-white">
@@ -155,7 +149,15 @@ export default function AffichesIALanding() {
                     ))}
                   </ul>
                   <Button
-                    onClick={() => handleCheckout(link)}
+                    onClick={() =>
+                      handleCheckout(
+                        p.title === "Affiche unique"
+                          ? STRIPE_LINKS.unique
+                          : p.title === "Pack 5 affiches"
+                          ? STRIPE_LINKS.pack5
+                          : STRIPE_LINKS.abo
+                      )
+                    }
                     className="mt-6 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
                   >
                     Choisir cette offre
